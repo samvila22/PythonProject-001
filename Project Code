@@ -1,0 +1,90 @@
+#Sam Vila Assignment 2
+from stack_array import Stack
+
+#operators and priorities for our infix to postfix function
+OPERATORS = {'+', '-', '*', '/', '(', ')', '^'}  # set of operators
+PRIORITY = {'+':1, '-':1, '*':2, '/':2, '^':3}
+def infix_to_postfix(expression):
+# initialize empty stack and output
+    stack = []
+    output = ''
+
+#loop through the expression
+    for a in expression:
+        if a not in OPERATORS:
+            output += a
+        elif a == '(':
+            stack.append('(')
+        elif a == ')':
+            while stack and stack[-1] != '(':
+                output += stack.pop()
+            stack.pop()
+        else:
+            # last priority
+            # pop and put in output
+            while stack and stack[-1] != '(' and PRIORITY[a] <= PRIORITY[stack[-1]]:
+                output += stack.pop()
+            stack.append(a)
+#add it all to output
+    while stack:
+        output += " " + stack.pop()
+#fix spacing issues
+    postfix = ""
+    for i in range(len(output)):
+        if output[i] in OPERATORS:
+            postfix = postfix + output[i:len(output)]
+            break
+        elif output[i] == " " and output[i-1] == " ":
+            postfix = postfix
+        else:
+            postfix = postfix + output[i]
+    return postfix
+
+
+
+def postfix_eval(text):
+    #initialize empty list
+    s = []
+    for symbol in text:
+        plus = None
+        #check if number
+        if symbol in "0123456789":
+            s.append(int(symbol))
+        #else must be operator
+        else:
+            if symbol == "+":
+                plus = s.pop() + s.pop()
+            elif symbol == "-":
+                plus = s.pop() - s.pop()
+            elif symbol == "*":
+                plus = s.pop() * s.pop()
+            elif symbol == "/":
+                plus = s.pop() / s.pop()
+        #if no operator, just return number
+        if plus is not None:
+            s.append(plus)
+    return s.pop()
+
+def postfix_valid(postfixExpr):
+    #using operator vs spacing count to see if we have too many operators
+    opcount = 0
+    spacecount = 0
+    #also checking if too many numbers
+    numcount = 0
+    for i in postfixExpr:
+        if i == " ":
+            spacecount += 1
+        elif i in OPERATORS:
+            opcount += 1
+        elif i in "0123456789":
+            numcount += 1
+    #if too many operators, False
+    if 2 * opcount > spacecount:
+        return False
+    #if too many numbers, False
+    elif numcount - opcount > 1:
+        return False
+    elif postfixExpr == "":
+        return False
+    else:
+        return True

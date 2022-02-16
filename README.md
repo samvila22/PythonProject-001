@@ -1,2 +1,3 @@
 # PythonProject-001
 Expression evaluation of prefix and postfix statements using stack methods
+Using Last in First out methods of python stacks, I was able to construct 3 functions that work with postfix and prefix values. The 3 functions are infix_to_postfix, postfix_eval, and postfix_valid. infix_to_postfix takes an infix expression and changes that string to it's equivalent postfix statement. postfix_eval takes a postfix expression and turns that string of an expression into the value that results. The last is postfix_valid which takes a postfix expression and simply returns a boolean value depending on if this expression is valid or not. 
